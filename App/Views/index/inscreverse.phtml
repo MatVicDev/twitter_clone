@@ -16,17 +16,17 @@
         <div class="row">
           <div class="col">
             
-            <form action="" method="post">
+            <form action="/registrar" method="post">
               <div class="form-group">
-                <input type="text" class="form-control" placeholder="Nome">
+                <input name="nome" value="<?= $this->view->usuario['nome'] ?>" type="text" class="form-control" placeholder="Nome">
               </div>
               
               <div class="form-group">
-                <input type="text" class="form-control" placeholder="E-mail">
+                <input name="email" value="<?= $this->view->usuario['email'] ?>" type="text" class="form-control" placeholder="E-mail">
               </div>
 
               <div class="form-group">
-                <input type="password" class="form-control" placeholder="Senha">
+                <input name="senha" value="<?= $this->view->usuario['senha'] ?>" type="password" class="form-control" placeholder="Senha">
               </div>
               
               <div class="mt-4 mb-4">
@@ -34,6 +34,13 @@
                   Ao inscrever-se, você concorda com os Termos de Serviço e com as Políticas de Privacidade, incluindo o Uso de Cookies. Outras pessoas poderão encontrar você pelo e-mail ou número de telefone fornecido · Opções de Privacidade
                 </small>
               </div>
+
+              <?php if($this->view->erroCadastro) { ?>
+                <small class="form-text text-danger mb-3">
+                  *Erro ao tentar cadastrar usuário! Verifique se os campos foram preenchidos corretamente.
+                </small>
+              <?php } ?>
+
               <button type="submit" class="btn btn-primary btn-block">Inscrever-se</button>
             </form>
 
