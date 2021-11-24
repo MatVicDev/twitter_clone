@@ -9,6 +9,7 @@ class IndexController extends Action
 {
 	public function index()
 	{
+		$this->view->login = isset($_GET['login']) ? $_GET['login'] : ''; // Verifica se o usuário foi autenticado
 		$this->render('index');
 	}
 
