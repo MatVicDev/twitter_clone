@@ -33,7 +33,26 @@ class AppController extends Action
 		header('Location: /timeline');
 	}
 
-	public function validarAutenticacao()
+	public function quemSeguir()
+	{
+		$this->validarAutenticacao();
+
+		$pesquisarPor = isset($_GET['pesquisarPor']) ? $_GET['pesquisarPor'] : '';
+
+		$usuarios = array();
+
+		if($pesquisarPor != '') {
+			$usuario = Container::getModel('Usuario');
+			$usuario->__set('nome', $pesquisarPor);
+			$usuarios = $usuario->getAll();
+		}
+
+		$this->view->seguir_usuario = $usuarios;
+
+		$this->render('quemSeguir');
+	}
+
+	public function validarAutenticacao() // Confirma se o usuário foi autenticado
 	{
 		session_start();
 

@@ -74,5 +74,15 @@ class Usuario extends Model
 
 		return $this;
 	}
+
+	public function getAll()
+	{
+		$query = 'SELECT id_usuario, nome, email FROM tb_usuarios WHERE nome LIKE :NOME';
+		$stmt = $this->db->prepare($query);
+		$stmt->bindValue(':NOME', '%'.$this->__get('nome').'%');
+		$stmt->execute();
+
+		return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+	}
 }
 ?>
