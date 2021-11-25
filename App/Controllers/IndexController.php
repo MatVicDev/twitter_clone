@@ -31,7 +31,7 @@ class IndexController extends Action
 
 		$usuario->__set('nome', $_POST['nome']);
 		$usuario->__set('email', $_POST['email']);
-		$usuario->__set('senha', $_POST['senha']);
+		$usuario->__set('senha', md5($_POST['senha'])); // Criptografia md5
 
 		// Verifica se é um usuário válido e se o usuário já foi cadastrado
 		if($usuario->validarCadastro() && count($usuario->getEmailUsuario()) == 0) { 

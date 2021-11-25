@@ -13,7 +13,7 @@ class AuthController extends Action
 
 		// Recebendo dados do formulário
 		$usuario->__set('email', $_POST['email']);
-		$usuario->__set('senha', $_POST['senha']);
+		$usuario->__set('senha', md5($_POST['senha'])); // Criptografia md5
 
 		$usuario->autenticar(); // Autenticação
 
