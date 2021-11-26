@@ -73,6 +73,19 @@ class AppController extends Action
 		header('Location: /quem_seguir?pesquisarPor='.$_SESSION['pesquisarPor']);
 	}
 
+	public function delete()
+	{
+		$this->validarAutenticacao();
+
+		$tweet = isset($_GET['tweet']) ? $_GET['tweet'] : '';
+
+		$usuario = Container::getModel('Tweet');
+		$usuario->__set('id_tweet', $tweet);
+		$usuario->deletarTweet();
+
+		header('Location: /timeline');
+	}
+
 	public function validarAutenticacao() // Confirma se o usuário foi autenticado
 	{
 		session_start();

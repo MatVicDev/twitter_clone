@@ -48,6 +48,15 @@ class Tweet extends Model
 				(t.fk_id_usuario = u.id_usuario)
 			WHERE 
 				t.fk_id_usuario = :FK_ID_USUARIO
+			OR
+				t.fk_id_usuario IN (
+					SELECT 
+						id_usuario_seguindo
+					FROM
+						tb_seguidores
+					WHERE
+						fk_id_usuario = :FK_ID_USUARIO
+					)
 			ORDER BY
 				t.data DESC';
 
@@ -56,6 +65,17 @@ class Tweet extends Model
 		$stmt->execute();
 
 		return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+	}
+
+	// Deletar tweet
+	public function deletarTweet()
+	{
+		$query = 'DELETE FROM tb_tweets WHERE id_tweet = :ID_TWEET';
+		$stmt = $this->db->prepare($query);
+		$stmt->bindValue(':ID_TWEET', $this->__get('id_tweet'));
+		$stmt->execute();
+
+		return true;
 	}
 }
 ?>
