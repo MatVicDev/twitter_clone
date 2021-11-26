@@ -39,17 +39,38 @@ class AppController extends Action
 
 		$pesquisarPor = isset($_GET['pesquisarPor']) ? $_GET['pesquisarPor'] : '';
 
+		$_SESSION['pesquisarPor'] = $pesquisarPor;
+
 		$usuarios = array();
 
 		if($pesquisarPor != '') {
 			$usuario = Container::getModel('Usuario');
 			$usuario->__set('nome', $pesquisarPor);
+			$usuario->__set('id_usuario', $_SESSION['id_usuario']);
 			$usuarios = $usuario->getAll();
 		}
 
 		$this->view->seguir_usuario = $usuarios;
 
 		$this->render('quemSeguir');
+	}
+
+	public function acao()
+	{
+		$this->validarAutenticacao();
+
+		$acao = isset($_GET['acao']) ? $_GET['acao'] : '';
+		$id_usuario_seguindo = isset($_GET['id_usuario']) ? $_GET['id_usuario'] : '';
+
+		$usuario = Container::getModel('Usuario');
+		$usuario->__set('id_usuario', $_SESSION['id_usuario']);
+
+		if($acao == 'seguir') {
+			$usuario->seguirUsuario($id_usuario_seguindo);
+		} else if($acao == 'deixar_de_seguir') {
+			$usuario->deixarSeguirUsuario($id_usuario_seguindo);
+		}
+		header('Location: /quem_seguir?pesquisarPor='.$_SESSION['pesquisarPor']);
 	}
 
 	public function validarAutenticacao() // Confirma se o usuário foi autenticado

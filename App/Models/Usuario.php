@@ -75,14 +75,54 @@ class Usuario extends Model
 		return $this;
 	}
 
+	// Buscar por um ou vários usuários no DB
 	public function getAll()
 	{
-		$query = 'SELECT id_usuario, nome, email FROM tb_usuarios WHERE nome LIKE :NOME';
+		$query = '
+		SELECT 
+			u.id_usuario, u.nome, u.email,
+			(
+				SELECT
+					count(*)
+				FROM
+					tb_seguidores as s
+				WHERE
+					s.fk_id_usuario = :ID_USUARIO AND s.id_usuario_seguindo = u.id_usuario
+			) as seguindo_sn
+		FROM 
+			tb_usuarios as u
+		WHERE 
+			nome 
+		LIKE :NOME AND id_usuario != :ID_USUARIO';
+
 		$stmt = $this->db->prepare($query);
 		$stmt->bindValue(':NOME', '%'.$this->__get('nome').'%');
+		$stmt->bindValue(':ID_USUARIO', $this->__get('id_usuario'));
 		$stmt->execute();
 
 		return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+	}
+
+	public function seguirUsuario($id_usuario_seguindo)
+	{
+		$query = 'INSERT INTO tb_seguidores(fk_id_usuario, id_usuario_seguindo) VALUES(:FK_ID_USUARIO, :ID_USUARIO_SEGUINDO)';
+		$stmt = $this->db->prepare($query);
+		$stmt->bindValue(':FK_ID_USUARIO', $this->__get('id_usuario'));
+		$stmt->bindValue(':ID_USUARIO_SEGUINDO', $id_usuario_seguindo);
+		$stmt->execute();
+
+		return true;
+	}
+
+	public function deixarSeguirUsuario($id_usuario_seguindo)
+	{
+		$query = 'DELETE FROM tb_seguidores WHERE fk_id_usuario = :FK_ID_USUARIO AND id_usuario_seguindo = :ID_USUARIO_SEGUINDO';
+		$stmt = $this->db->prepare($query);
+		$stmt->bindValue(':FK_ID_USUARIO', $this->__get('id_usuario'));
+		$stmt->bindValue(':ID_USUARIO_SEGUINDO', $id_usuario_seguindo);
+		$stmt->execute();
+
+		return true;
 	}
 }
 ?>
