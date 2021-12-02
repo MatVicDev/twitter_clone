@@ -67,6 +67,75 @@ class Tweet extends Model
 		return $stmt->fetchAll(\PDO::FETCH_ASSOC);
 	}
 
+	// recuperar para a páginação
+	public function getPorPagina($limit, $offset)
+	{
+		$query = "
+			SELECT 
+				t.id_tweet, t.fk_id_usuario, u.nome, t.tweets, 
+				DATE_FORMAT(t.data, '%d/%m/%Y %H:%i') as data
+			FROM 
+				tb_tweets as t
+			LEFT JOIN 
+				tb_usuarios as u 
+			ON
+				(t.fk_id_usuario = u.id_usuario)
+			WHERE 
+				t.fk_id_usuario = :FK_ID_USUARIO
+			OR
+				t.fk_id_usuario IN (
+					SELECT 
+						id_usuario_seguindo
+					FROM
+						tb_seguidores
+					WHERE
+						fk_id_usuario = :FK_ID_USUARIO
+					)
+			ORDER BY
+				t.data DESC
+			LIMIT
+				$limit
+			OFFSET
+				$offset";
+
+		$stmt = $this->db->prepare($query);
+		$stmt->bindValue(':FK_ID_USUARIO', $this->__get('fk_id_usuario'));
+		$stmt->execute();
+
+		return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+	}
+
+	// recuperar total de tweets
+	public function getTotalTweets()
+	{
+		$query = "
+			SELECT 
+				count(*) as total
+			FROM 
+				tb_tweets as t
+			LEFT JOIN 
+				tb_usuarios as u 
+			ON
+				(t.fk_id_usuario = u.id_usuario)
+			WHERE 
+				t.fk_id_usuario = :FK_ID_USUARIO
+			OR
+				t.fk_id_usuario IN (
+					SELECT 
+						id_usuario_seguindo
+					FROM
+						tb_seguidores
+					WHERE
+						fk_id_usuario = :FK_ID_USUARIO
+					)";
+
+		$stmt = $this->db->prepare($query);
+		$stmt->bindValue(':FK_ID_USUARIO', $this->__get('fk_id_usuario'));
+		$stmt->execute();
+
+		return $stmt->fetch(\PDO::FETCH_ASSOC);
+	}
+
 	// Deletar tweet
 	public function deletarTweet()
 	{
