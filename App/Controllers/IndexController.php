@@ -9,7 +9,7 @@ class IndexController extends Action
 {
 	public function index()
 	{
-		$this->view->login = isset($_GET['login']) ? $_GET['login'] : ''; // Verifica se o usuário foi autenticado
+		$this->view->login = isset($_GET['login']) ? $_GET['login'] : '';
 		$this->render('index');
 	}
 
@@ -26,20 +26,15 @@ class IndexController extends Action
 
 	public function registrar()
 	{
-		// Receber os dados do formulário
 		$usuario = Container::getModel('Usuario');
 
 		$usuario->__set('nome', $_POST['nome']);
 		$usuario->__set('email', $_POST['email']);
 		$usuario->__set('senha', md5($_POST['senha'])); // Criptografia md5
 
-		// Verifica se é um usuário válido e se o usuário já foi cadastrado
 		if($usuario->validarCadastro() && count($usuario->getEmailUsuario()) == 0) { 
-			
-			$usuario->salvar(); // Salva o registro no banco de dados
-
+			$usuario->salvar();
 			$this->render('cadastro');
-
 		} else {
 			$this->view->usuario = array(
 				'nome' => $_POST['nome'],
@@ -49,7 +44,6 @@ class IndexController extends Action
 			$this->view->erroCadastro = true;
 			$this->render('inscreverse');
 		}
-
 	}
 }
 ?>

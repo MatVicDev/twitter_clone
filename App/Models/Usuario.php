@@ -21,7 +21,6 @@ class Usuario extends Model
 		$this->$attr = $value;
 	}
 
-	// Salvar usuário no banco de dados
 	public function salvar()
 	{
 		$query = 'INSERT INTO tb_usuarios(nome, email, senha)VALUES(:NOME, :EMAIL, :SENHA)';
@@ -34,7 +33,6 @@ class Usuario extends Model
 		return $this;
 	}
 
-	// Validar um cadastro
 	public function validarCadastro()
 	{
 		$valido = true;
@@ -45,7 +43,6 @@ class Usuario extends Model
 		return $valido;
 	}
 
-	// Verificar se o usuário já foi cadastrado
 	public function getEmailUsuario()
 	{
 		$query = 'SELECT nome, email FROM tb_usuarios WHERE email = :EMAIL';
@@ -56,7 +53,6 @@ class Usuario extends Model
 		return $stmt->fetchAll(\PDO::FETCH_ASSOC);
 	}
 
-	// Autenticar um usuário
 	public function autenticar()
 	{
 		$query = 'SELECT id_usuario, nome, email FROM tb_usuarios WHERE email = :EMAIL AND senha = :SENHA';
@@ -75,7 +71,6 @@ class Usuario extends Model
 		return $this;
 	}
 
-	// Buscar por um ou vários usuários no DB
 	public function getAll()
 	{
 		$query = '
@@ -125,7 +120,6 @@ class Usuario extends Model
 		return true;
 	}
 
-	// Nome do usuário
 	public function getNomeUsuario()
 	{
 		$query = 'SELECT nome FROM tb_usuarios WHERE id_usuario = :ID_USUARIO';
@@ -136,7 +130,6 @@ class Usuario extends Model
 		return $stmt->fetch(\PDO::FETCH_ASSOC);
 	}
 
-	// Total de tweets
 	public function getTotalTweets()
 	{
 		$query = 'SELECT count(*) as total_tweets FROM tb_tweets WHERE fk_id_usuario = :ID_USUARIO';
@@ -147,7 +140,6 @@ class Usuario extends Model
 		return $stmt->fetch(\PDO::FETCH_ASSOC);
 	}
 
-	// Total de pessoas que o usuário está seguindo
 	public function getTotalSeguindo()
 	{
 		$query = 'SELECT count(*) as total_seguindo FROM tb_seguidores WHERE fk_id_usuario = :ID_USUARIO';
@@ -158,7 +150,6 @@ class Usuario extends Model
 		return $stmt->fetch(\PDO::FETCH_ASSOC);
 	}
 
-	// Total de seguidores
 	public function getTotalSeguidores()
 	{
 		$query = 'SELECT count(*) as total_seguidores FROM tb_seguidores WHERE id_usuario_seguindo = :ID_USUARIO';

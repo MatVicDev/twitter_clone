@@ -21,7 +21,6 @@ class Tweet extends Model
 		$this->$attr = $value;
 	}
 
-	// Salvar
 	public function salvar()
 	{
 		$query = 'INSERT INTO tb_tweets(fk_id_usuario, tweets)VALUES(:FK_ID_USUARIO, :TWEETS)';
@@ -33,7 +32,6 @@ class Tweet extends Model
 		return $this;
 	}
 
-	// Recuperar
 	public function getAll()
 	{
 		$query = '
@@ -67,7 +65,6 @@ class Tweet extends Model
 		return $stmt->fetchAll(\PDO::FETCH_ASSOC);
 	}
 
-	// recuperar para a páginação
 	public function getPorPagina($limit, $offset)
 	{
 		$query = "
@@ -105,7 +102,6 @@ class Tweet extends Model
 		return $stmt->fetchAll(\PDO::FETCH_ASSOC);
 	}
 
-	// recuperar total de tweets
 	public function getTotalTweets()
 	{
 		$query = "
@@ -136,7 +132,6 @@ class Tweet extends Model
 		return $stmt->fetch(\PDO::FETCH_ASSOC);
 	}
 
-	// Deletar tweet
 	public function deletarTweet()
 	{
 		$query = 'DELETE FROM tb_tweets WHERE id_tweet = :ID_TWEET';

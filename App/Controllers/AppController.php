@@ -111,7 +111,7 @@ class AppController extends Action
 		header('Location: /timeline');
 	}
 
-	public function validarAutenticacao() // Confirma se o usuário foi autenticado
+	public function validarAutenticacao()
 	{
 		session_start();
 
